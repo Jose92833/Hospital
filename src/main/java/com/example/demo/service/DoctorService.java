@@ -9,32 +9,47 @@ import com.example.demo.repository.DoctorRepository;
 @Service
 public class DoctorService {
     
-    private final DoctorRepository repo;
+     private final DoctorRepository repo;
+
     public DoctorService(DoctorRepository repo) {
         this.repo = repo;
     }
 
-    public DoctorResponse add(DoctorRequest doctorRequest) {
-        Doctor doctor = Doctor.builder()
-                .name(doctorRequest.name())
-                .lastName(doctorRequest.lastName())
-                .email(doctorRequest.email())
-                .specialty(doctorRequest.specialty())
-                .build();
-        
-        repo.add(doctor);
-        return toResponse(doctor);
-    }
+    
+    public DoctorResponse add(DoctorRequest request) {
+        Doctor doctor = new Doctor();
+        doctor.setName(request.name());
+        doctor.setLastName(request.lastName());
+        doctor.setEmail(request.email());
+        doctor.setSpecialty(request.specialty());
 
-    private DoctorResponse toResponse(Doctor doctor) {
-        return new DoctorResponse(
-                doctor.getId(),
-                doctor.getName(),
-                doctor.getLastName(),
-                doctor.getSpecialty(),
-                doctor.getEmail()
-        );
+        Doctor saved = repo.add(doctor);
+        return new DoctorResponse(saved.getId(), saved.getName(), saved.getLastName(), saved.getEmail(), saved.getSpecialty());
     }
 
     
+    public List<Doctor> GetAll() {
+        return repo.findAll().stream().collect(Collectors.toList());
+    }
+
+   
+    public Doctor getById(UUID id) {
+        return repo.findById(id);
+    }
+
+    
+    public Doctor update(UUID id, Doctor NewDoctor) {
+        NewDoctor.setId(id);
+        return repo.update(NewDoctor);
+    }
+
+    
+    public void DeleteDoctor(UUID id) {
+        repo.deleteById(id);
+    }
+
+    
+    public Doctor Getbyname(String name) {
+        return repo.findByName(name);
+    }
 }
