@@ -11,34 +11,45 @@ import com.example.demo.model.Doctor;
 @Repository
 public class DoctorRepository {
     
-    private final Map<UUID, Doctor> data = new ConcurrentHashMap<>();
+   private final Map<UUID, Doctor> data = new ConcurrentHashMap<>();
 
-    public Doctor add(Doctor doctor){
-        if(doctor.getId() == null)
+    
+    public Doctor add(Doctor doctor) {
+        if (doctor.getId() == null)
             doctor.setId(UUID.randomUUID());
         data.put(doctor.getId(), doctor);
         return doctor;
     }
-    public Doctor findById(UUID id){
-        return data.get(id);
-    }   
-    public void deleteById(UUID id){
-        data.remove(id);
 
-    }
-    public Doctor update(Doctor doctor){
-        if (doctor.getId() == null || !data.containsKey(doctor.getId())){
-            throw new IllegalArgumentException("Doctor with id " + doctor.getId() + " does not exist.");
-        }
-        return data.put(doctor.getId(), doctor);
-    }
-    public Collection<Doctor> findAll(){
+   
+    public Collection<Doctor> findAll() {
         return data.values();
     }
+
     
-    
+    public Doctor findById(UUID id) {
+        return data.get(id);
+    }
 
 
-       
+    public void deleteById(UUID id) {
+        data.remove(id);
+    }
+
     
+    public Doctor update(Doctor doctor) {
+        if (doctor.getId() == null || !data.containsKey(doctor.getId())) {
+            throw new IllegalArgumentException("Doctor with id " + doctor.getId() + " does not exist.");
+        }
+        data.put(doctor.getId(), doctor);
+        return doctor;
+    }
+
+    
+    public Doctor findByName(String name) {
+        return data.values().stream()
+                .filter(doc -> doc.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
+    }
 }
