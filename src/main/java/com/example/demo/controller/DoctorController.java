@@ -48,7 +48,7 @@ public class DoctorController {
 
     @PutMapping("/doctor/{id}")
     public Doctor UpdateDoctor(@PathVariable UUID id, @RequestBody Doctor NewDoctor) {
-        return service.update(id, nuevoDoctor);
+        return service.update(id, NewDoctor);
     }
 
     @DeleteMapping("/doctor/{id}")
