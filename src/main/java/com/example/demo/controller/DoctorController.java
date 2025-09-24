@@ -26,32 +26,40 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class DoctorController {
     
     private final DoctorService service;
+
     public DoctorController(DoctorService service) {
         this.service = service;
     }
+
     @PostMapping("/doctor")
-    public DoctorResponse add(DoctorRequest doctorRequest) {
+    public DoctorResponse add(@RequestBody DoctorRequest doctorRequest) {
         return service.add(doctorRequest);
     }
 
     @GetMapping("/doctor")
-    public List<Doctor> obtenerTodos() {
-        return service.Todos();
+    public List<Doctor> GetAllDoctor() {
+        return service.GetAll();
     }
 
     @GetMapping("/doctor/{id}")
-    public Doctor ObtenerDoctorId(@PathVariable UUID id) {
-        return service.obtenerDoctor(id);
+    public Doctor getbyidDoctor(@PathVariable UUID id) {
+        return service.getById(id);
     }
 
-    @PutMapping("doctor/{id}")
-    public void ActualizarDoctor(@PathVariable UUID id, @RequestBody Doctor nuevoDoctor) {
-        service.ActualizarDoctor(id, nuevoDoctor);
+    @PutMapping("/doctor/{id}")
+    public Doctor UpdateDoctor(@PathVariable UUID id, @RequestBody Doctor NewDoctor) {
+        return service.update(id, nuevoDoctor);
     }
 
     @DeleteMapping("/doctor/{id}")
-    public void EliminarDoctor(@PathVariable UUID id) {
-        service.EliminarDoctor(id);
+    public void DeleteDoctor(@PathVariable UUID id) {
+        service.DeleteDoctor(id);
     }
+
     
+    @GetMapping("/doctor/name/{name}")
+    public Doctor Getbyname(@PathVariable String name) {
+        return service.Getbyname(name);
+    }
 }
+
